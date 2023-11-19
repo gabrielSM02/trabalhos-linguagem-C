@@ -1,0 +1,98 @@
+#include <stdio.h>
+
+// Função para imprimir o tabuleiro
+void ImprimirTabuleiro(char tabuleiro[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            printf(" %c ", tabuleiro[i][j]);
+            if (j < 2) {
+                printf("|");
+            }
+        }
+        printf("\n");
+        if (i < 2) {
+            printf("---+---+---\n");
+        }
+    }
+}
+
+// Função para verificar se a jogada é válida
+int JogadaValida(char tabuleiro[3][3], int linha, int coluna) {
+    return linha >= 0 && linha < 3 && coluna >= 0 && coluna < 3 && tabuleiro[linha][coluna] == ' ';
+}
+
+// Função para verificar se o jogo terminou
+int JogoTerminou(char tabuleiro[3][3], char jogador) {
+    // Verificar vitória nas linhas, colunas e diagonais
+    for (int i = 0; i < 3; i++) {
+        if (tabuleiro[i][0] == jogador && tabuleiro[i][1] == jogador && tabuleiro[i][2] == jogador) {
+            return 1;
+        }
+        if (tabuleiro[0][i] == jogador && tabuleiro[1][i] == jogador && tabuleiro[2][i] == jogador) {
+            return 1;
+        }
+    }
+    if (tabuleiro[0][0] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][2] == jogador) {
+        return 1;
+    }
+    if (tabuleiro[0][2] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][0] == jogador) {
+        return 1;
+    }
+
+    // Verificar empate
+    int empate = 1;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (tabuleiro[i][j] == ' ') {
+                empate = 0;
+                break;
+            }
+        }
+    }
+    if (empate) {
+        return 2;
+    }
+
+    return 0;
+}
+
+int main() {
+    char tabuleiro[3][3] = {
+        {' ', ' ', ' '},
+        {' ', ' ', ' '},
+        {' ', ' ', ' '}
+    };
+    char jogador = 'X';
+
+    int linha, coluna;
+    int resultado = 0;
+
+    printf("Bem-vindo ao Jogo da Velha!\n");
+
+    while (1) {
+        ImprimirTabuleiro(tabuleiro);
+        printf("Jogador %c, digite a linha (0-2) e coluna (0-2): ", jogador);
+        scanf("%d %d", &linha, &coluna);
+
+        if (JogadaValida(tabuleiro, linha, coluna)) {
+            tabuleiro[linha][coluna] = jogador;
+            resultado = JogoTerminou(tabuleiro, jogador);
+
+            if (resultado == 1) {
+                ImprimirTabuleiro(tabuleiro);
+                printf("Jogador %c venceu!\n", jogador);
+                break;
+            } else if (resultado == 2) {
+                ImprimirTabuleiro(tabuleiro);
+                printf("O jogo terminou em empate!\n");
+                break;
+            }
+
+            jogador = (jogador == 'X') ? 'O' : 'X';
+        } else {
+            printf("Jogada inválida. Tente novamente.\n");
+        }
+    }
+
+    return 0;
+}
