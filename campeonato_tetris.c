@@ -21,37 +21,6 @@ int compararJogadores(const void *a, const void *b) {
     }
 }
 
-int lerPontuacao(int numeroPontuacao) {
-    int pontuacao;
-    char buffer[50];
-
-    while (1) {
-        printf("Digite a pontuação #%d: ", numeroPontuacao);
-        scanf("%s", buffer);
-
-        int valido = 1;
-        for (int i = 0; i < strlen(buffer); i++) {
-            if (!isdigit(buffer[i])) {
-                valido = 0;
-                break;
-            }
-        }
-
-        if (valido) {
-            pontuacao = atoi(buffer);
-            if (pontuacao <= 1000) {
-                break;
-            } else {
-                printf("Limite de pontuação acima do permitido (1000 pontos). Tente novamente.\n");
-            }
-        } else {
-            printf("Entrada inválida. Por favor, insira apenas números.\n");
-        }
-    }
-
-    return pontuacao;
-}
-
 int main() {
     int teste = 1;
     int J;
@@ -66,8 +35,9 @@ int main() {
             printf("Nome do jogador #%d (até 15 letras): ", i + 1);
             scanf("%s", jogadores[i].nome);
 
+            printf("Pontuações (12 números separados por espaço): ");
             for (int j = 0; j < 12; j++) {
-                jogadores[i].pontuacoes[j] = lerPontuacao(j + 1);
+                scanf("%d", &jogadores[i].pontuacoes[j]);
             }
         }
 
